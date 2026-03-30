@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "SudokuAPI",
+    platforms: [.macOS(.v10_15)],
     products: [
         .executable(name: "SudokuAPI", targets: ["SudokuAPI"]),
     ],
