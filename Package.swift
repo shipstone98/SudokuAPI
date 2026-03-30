@@ -5,11 +5,16 @@ import PackageDescription
 let package = Package(
     name: "SudokuAPI",
     products: [
-        .library(name: "SudokuAPI", targets: ["SudokuAPI"]),
+        .executable(name: "SudokuAPI", targets: ["SudokuAPI"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.121.3")
     ],
     targets: [
-        .target(name: "SudokuAPI"),
-        .testTarget(name: "SudokuAPITests", dependencies: ["SudokuAPI"])
+        .executableTarget(
+            name: "SudokuAPI",
+            dependencies: [.product(name: "Vapor", package: "Vapor")]
+        )
     ],
     swiftLanguageModes: [.v6]
 )
