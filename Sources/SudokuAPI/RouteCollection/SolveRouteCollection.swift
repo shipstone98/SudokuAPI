@@ -1,0 +1,45 @@
+//
+//  SolveRouteCollection.swift
+//  SudokuAPI
+//
+//  Created by Christopher Shipstone on 30/03/2026.
+//
+
+import Sudoku
+import Vapor
+
+internal struct SolveRouteCollection : RouteCollection {
+    func boot(routes: any Vapor.RoutesBuilder) throws {
+        let api = routes.grouped("api")
+        let solve = api.grouped("solve")
+        solve.get("recursion", use: self.recursion)
+    }
+    
+    private func recursion(request: Request) throws -> RecursionResult {
+        guard let string = request.query[String.self, at: "sudoku"],
+              let sudoku = ArraySudoku(string) else {
+            throw Abort(.badRequest)
+        }
+        
+        var solver = RecursiveSudokuSolver(sudoku)
+        var generator = SystemRandomNumberGenerator()
+        let isSolved = solver.solve(using: &generator)
+        return .init(solver.sudoku, solver.moves, isSolved)
+    }
+    
+    private struct RecursionResult : Content {
+        private let isSolved: Bool
+        private let moves: [SudokuSolverMove]
+        private let sudoku: String
+        
+        fileprivate init(
+            _ sudoku: ArraySudoku,
+            _ moves: [SudokuSolverMove],
+            _ isSolved: Bool
+        ) {
+            self.isSolved = isSolved
+            self.moves = moves
+            self.sudoku = sudoku.description
+        }
+    }
+}
