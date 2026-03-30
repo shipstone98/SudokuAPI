@@ -27,7 +27,7 @@ extension ArraySudoku : LosslessStringConvertible {
             return nil
         }
         
-        let index = description.startIndex
+        var index = description.startIndex
         
         for row in 0..<9 {
             for column in 0..<9 {
@@ -36,6 +36,7 @@ extension ArraySudoku : LosslessStringConvertible {
                 }
                 
                 self[row, column] = value
+                index = description.index(after: index)
             }
         }
     }

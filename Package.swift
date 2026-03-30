@@ -10,7 +10,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.121.3"),
-        .package(name: "Sudoku", path: "../../../packages/swift/Sudoku")
+        .package(name: "Sudoku", path: "../../../packages/swift/sudoku")
     ],
     targets: [
         .executableTarget(
