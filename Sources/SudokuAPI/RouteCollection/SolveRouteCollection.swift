@@ -42,7 +42,7 @@ internal struct SolveRouteCollection : RouteCollection {
     
     private struct Result : Content {
         private let isSolved: Bool
-        private let moves: [SudokuSolverMove]
+        private let moves: [Move]
         private let sudoku: String
         
         fileprivate init(
@@ -51,8 +51,25 @@ internal struct SolveRouteCollection : RouteCollection {
             _ isSolved: Bool
         ) {
             self.isSolved = isSolved
-            self.moves = moves
+            
+            self.moves = moves.map {
+                .init($0.strategy?.description, $0.locations)
+            }
+            
             self.sudoku = sudoku.description
+        }
+        
+        private struct Move : Content {
+            private let locations: Set<SudokuSolverMove.Location>
+            private let strategy: String?
+            
+            internal init(
+                _ strategy: String?,
+                _ locations: Set<SudokuSolverMove.Location>
+            ) {
+                self.locations = locations
+                self.strategy = strategy
+            }
         }
     }
 }
