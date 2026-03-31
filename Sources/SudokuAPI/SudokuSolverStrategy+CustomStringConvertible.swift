@@ -22,6 +22,14 @@ extension SudokuSolverStrategy : CustomStringConvertible {
             return "Claiming Candidate"
         case .nakedPair:
             return "Naked Pair"
+        case .hiddenPair:
+            return "Hidden Pair"
+        case .xWing:
+            return "X-wing"
+        case .bugPlus1:
+            return "BUG+1"
+        case .xYWing:
+            return "XY-wing"
         }
     }
 }
