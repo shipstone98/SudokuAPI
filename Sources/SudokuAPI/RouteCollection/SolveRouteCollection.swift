@@ -11,33 +11,37 @@ import Vapor
 internal struct SolveRouteCollection : RouteCollection {
     func boot(routes: any Vapor.RoutesBuilder) throws {
         let api = routes.grouped("api")
+        api.get("solve", use: self.retrieve)
         let solve = api.grouped("solve")
         solve.get("recursion", use: self.recursion)
         solve.get("strategy", use: self.strategy)
     }
     
     private func recursion(request: Request) throws -> Result {
+        try self.retrieve(request: request, for: RecursiveSudokuSolver.self)
+    }
+    
+    private func retrieve(request: Request) throws -> Result {
+        try self.retrieve(request: request, for: CombinatorySudokuSolver.self)
+    }
+    
+    private func retrieve<Solver>(
+        request: Request,
+        for solverType: Solver.Type
+    ) throws -> Result where Solver : SudokuSolver, Solver.Sudoku == ArraySudoku {
         guard let string = request.query[String.self, at: "sudoku"],
               let sudoku = ArraySudoku(string) else {
             throw Abort(.badRequest)
         }
         
-        var solver = RecursiveSudokuSolver(sudoku)
+        var solver = solverType.init(sudoku)
         var generator = SystemRandomNumberGenerator()
         let isSolved = solver.solve(using: &generator)
         return .init(solver.sudoku, solver.moves, isSolved)
     }
     
     private func strategy(request: Request) throws -> Result {
-        guard let string = request.query[String.self, at: "sudoku"],
-              let sudoku = ArraySudoku(string) else {
-            throw Abort(.badRequest)
-        }
-        
-        var solver = StrategicSudokuSolver(sudoku)
-        var generator = SystemRandomNumberGenerator()
-        let isSolved = solver.solve(using: &generator)
-        return .init(solver.sudoku, solver.moves, isSolved)
+        try self.retrieve(request: request, for: StrategicSudokuSolver.self)
     }
     
     private struct Result : Content {
