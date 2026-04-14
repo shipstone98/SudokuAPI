@@ -9,8 +9,11 @@ let package = Package(
         .executable(name: "SudokuAPI", targets: ["SudokuAPI"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.121.3"),
-        .package(name: "Sudoku", path: "../../../packages/swift/sudoku")
+        .package(
+            url: "https://github.com/shipstone98/Sudoku.git",
+            from: "1.0.0"
+        ),
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.121.3")
     ],
     targets: [
         .executableTarget(
