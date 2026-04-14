@@ -15,10 +15,7 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "SudokuAPI",
-            dependencies: [
-                .product(name: "Sudoku", package: "Sudoku"),
-                .product(name: "Vapor", package: "Vapor")
-            ]
+            dependencies: ["Sudoku", .product(name: "Vapor", package: "Vapor")]
         )
     ],
     swiftLanguageModes: [.v6]
