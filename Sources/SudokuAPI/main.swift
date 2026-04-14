@@ -9,9 +9,7 @@ import Vapor
 
 fileprivate func main() async throws {
     let app = try await Application.make()
-    let generate = GenerateRouteCollection()
     let solve = SolveRouteCollection()
-    try app.register(collection: generate)
     try app.register(collection: solve)
     
     defer {

@@ -10,19 +10,15 @@ import Vapor
 
 internal struct SolveRouteCollection : RouteCollection {
     func boot(routes: any Vapor.RoutesBuilder) throws {
-        let api = routes.grouped("api")
-        api.get("solve", use: self.retrieve)
-        let solve = api.grouped("solve")
+        let solve = routes.grouped("api")
+            .grouped("solve")
+        
         solve.get("recursion", use: self.recursion)
         solve.get("strategy", use: self.strategy)
     }
     
     private func recursion(request: Request) throws -> Result {
         try self.retrieve(request: request, for: RecursiveSudokuSolver.self)
-    }
-    
-    private func retrieve(request: Request) throws -> Result {
-        try self.retrieve(request: request, for: CombinatorySudokuSolver.self)
     }
     
     private func retrieve<Solver>(
